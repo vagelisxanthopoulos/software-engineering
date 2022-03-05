@@ -1,0 +1,385 @@
+openapi: 3.0.0
+info:
+  title: Passproject
+  description: API controlling the interoperabillity of toll stations
+  contact:
+    name: softeng22-44 team
+  version: 1.0.0
+servers:
+  - url: http://localhost:9103/interoperability/api
+paths:
+  '/PassesPerStation/{stationID}/{date_from}/{date_to}':
+    get:
+      summary: Get all passes for this station for a specific timeperiod
+      parameters:
+      - in: path
+        name: stationID
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: date_from
+        schema:
+          type: string
+        required: true
+        description: Starting date of the timeperiod
+      - in: path
+        name: date_to
+        schema:
+          type: string
+        required: true
+        description: Ending date of the timeperiod
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PassesPerStation'
+        '404':
+          description: Passes not found
+        '500':
+          description: Internal error
+  '/PassesAnalysis/{op1_ID}/{op2_ID}{date_from}/{date_to}':
+    get:
+      summary: Get an analysis of passes via op1 with vehicle tags of op2 for a specific timeperiod
+      parameters:
+      - in: path
+        name: op1_ID
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: op2_ID
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: date_from
+        schema:
+          type: string
+        required: true
+        description: Starting date of the timeperiod
+      - in: path
+        name: date_to
+        schema:
+          type: string
+        required: true
+        description: Ending date of the timeperiod
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PassesAnalysis'
+        '404':
+          description: Passes not found
+        '500':
+          description: Internal error
+  '/PassesCost/{op1_ID}/{op2_ID}/{date_from}/{date_to}':
+    get:
+      summary: Get all passes via op1 with vehicle tags of op2 for a specific timeperiod and the debt of op2  to op1
+      parameters:
+      - in: path
+        name: op1_ID
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: op2_ID
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: date_from
+        schema:
+          type: string
+        required: true
+        description: Starting date of the timeperiod
+      - in: path
+        name: date_to
+        schema:
+          type: string
+        required: true
+        description: Ending date of the timeperiod
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PassesCost'
+        '404':
+          description: Passes not found
+        '500':
+          description: Internal error
+  '/ChargesBy/{op_ID}/{date_from}/{date_to}' :
+    get:
+      summary: Get all passes via op_ID by the other operator tags and their cost for a specific timeperiod
+      parameters:
+      - in: path
+        name: op_ID
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: date_from
+        schema:
+          type: string
+        required: true
+        description: Starting date of the timeperiod
+      - in: path
+        name: date_to
+        schema:
+          type: string
+        required: true
+        description: Ending date of the timeperiod
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargesBy'
+        '404':
+          description: Passes not found
+        '500':
+          description: Internal error
+  '/admin/healthcheck':
+    get:
+      summary : confirm end-to-end connectivity of client and database
+      responses:
+        '200':
+          description : OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/healthcheck'
+        '500':
+          description : failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string 
+  '/admin/resetpassions':
+    post:
+      summary : delete all the passions records in the database
+      responses:
+        '200':
+          description : OK
+          content:
+            application/json:
+              schema:
+                type : object
+                properties:
+                  status:
+                    type: string
+        '500':
+          description : failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+  '/admin/resetstations':
+    post:
+      summary : reset all the stations records in the database
+      responses:
+        '200':
+          description : OK
+          content:
+            application/json:
+              schema:
+                type : object
+                properties:
+                  status:
+                    type: string
+        '500':
+          description : failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+  '/admin/resetvehicles':
+    post:
+      summary : reset all the vehicles records in the database
+      responses:
+        '200':
+          description : OK
+          content:
+            application/json:
+              schema:
+                type : object
+                properties:
+                  status:
+                    type: string
+        '500':
+          description : failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+    
+  
+  
+  
+components:
+  schemas:
+    PassesPerStation:
+      type: object
+      properties:
+        PeriodFrom:
+          type: string
+          description: starting date
+        PeriodTo:
+          type: string
+          description: ending date
+        NumberofPasses:
+          type : integer
+        PassesList:
+          type : array
+          items : 
+            type : object
+            properties:
+              PassIndex:
+                type: integer
+              PassID:
+                type: string
+              PassTimeStamp :
+                type: string
+              VevicleID :
+                type: string
+              TagProvider:
+                type: string
+              PassType:
+                type: string
+              PassCharge:
+                type: integer
+    PassesAnalysis:
+      type: object
+      properties:
+        op1_ID:
+            type: string
+            description: operator ID_1
+        op2_ID:
+            type: string
+            description: operator ID_2
+        RequestTimestamp:
+          type: string
+          description: timestamp of the request
+        PeriodFrom:
+          type: string
+          description: starting date
+        PeriodTo:
+          type: string
+          description: ending date
+        NumberofPasses:
+          type : integer
+        PassesList:
+          type : array
+          items : 
+            type : object
+            properties:
+              PassIndex:
+                type: integer
+              PassID:
+                type: string
+              PassTimeStamp :
+                type: string
+              StationID :
+                type: string
+              Timestamp:
+                type: string
+              VehicleID:
+                type: string
+              Charge:
+                type: integer
+    PassesCost:
+      type: object
+      properties:
+        op1_ID:
+            type: string
+            description: operator ID_1
+        op2_ID:
+            type: string
+            description: operator ID_2
+        RequestTimestamp:
+          type: string
+          description: timestamp of the request
+        PeriodFrom:
+          type: string
+          description: starting date
+        PeriodTo:
+          type: string
+          description: ending date
+        NumberofPasses:
+          type : integer
+        PassesCost:
+          type : integer
+    ChargesBy:
+      type: object
+      properties:
+        op_ID:
+            type: string
+            description: operator ID
+        RequestTimestamp:
+          type: string
+          description: timestamp of the request
+        PeriodFrom:
+          type: string
+          description: starting date
+        PeriodTo:
+          type: string
+          description: ending date
+        PPOList:
+          type : array
+          items : 
+            type : object
+            properties:
+              VisitingOperator:
+                type: string
+              NumberOfPasses:
+                type: integer
+                description : number of passes by the above operator
+              PassesCost:
+                type: integer
+                description : total cost due to visiting operator passes
+    healthcheck:
+      type: object
+      properties:
+        status:
+          type: string
+        dbconnection:
+          type: object
+          properties:
+            Server: 
+              type: string
+            Database:
+              type: string
+            Uid:
+              type: string
+            Pwd:
+              type: string
+      
+      
+      
+      
+      
+      
+              
+          
+          

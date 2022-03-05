@@ -1,0 +1,8 @@
+### resetpasses
+POST http://localhost:9103/interoperability/api/admin/resetpasses
+### healthcheck
+GET http://localhost:9103/interoperability/api/admin/healthcheck
+### resetstations
+POST http://localhost:9103/interoperability/api/admin/resetstations
+### resetvehicles
+POST http://localhost:9103/interoperability/api/admin/resetvehicles

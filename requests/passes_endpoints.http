@@ -1,0 +1,11 @@
+### Charges By
+GET http://localhost:9103/interoperability/api/ChargesBy/AO/2020-06-13%2000:00:00/2021-06-13%2000:00:00
+
+### Passes Analysis
+GET http://localhost:9103/interoperability/api/PassesAnalysis/AO/GF/2020-06-13%2000:00:00/2021-06-13%2000:00:00
+
+### Passes Per Station
+GET http://localhost:9103/interoperability/api/PassesPerStation/AO01/2020-06-13%2000:00:00/2021-06-13%2000:00:00
+
+### Passes Cost
+GET http://localhost:9103/interoperability/api/PassesCost/AO/GF/2020-06-13%2000:00:00/2021-06-13%2000:00:00
